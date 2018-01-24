@@ -1,0 +1,108 @@
+!!PP set /p var=% %EXE_VER%< nul
+% Nick James
+!!PP echo % %DATE%
+
+# Introduction
+
+Selectomatic is sql which has an 
+sqlite database as input that writes html
+checkboxes enabling selection of fields 
+in tables and views. Selecting checkboxes then 
+generates an sql select string which can be sent 
+off to get the results
+
+# Installation
+
+# Synopsis
+ideally
+
+    sqlite3 db < selectomatic.sql > htmlFragment
+
+but perhaps
+
+    selectomatic -d db > htmlFragment
+
+where htmlFragment looks something like 
+
+
+    <fieldset>
+    <legend>table1</legend>
+    <label>
+        <input type="checkbox" onclick="do_applicableTags(this)" name="table1" value="field1"></input>
+        field1
+    </label>
+    <label>
+        <input type="checkbox" onclick="do_applicableTags(this)" name="table1" value="field2"></input>
+        field2
+    </label>
+    </fieldset>
+
+    <fieldset>
+    <legend>view1</legend>
+    <label>
+        <input type="checkbox" onclick="do_applicableTags(this)" name="view1" value="field1"></input>
+        field1
+    </label>
+    <label>
+        <input type="checkbox" onclick="do_applicableTags(this)" name="view1" value="field2"></input>
+        field2
+    </label>
+    </fieldset>
+    <!--
+    <input id="listButton" type="button" onclick="doList();" title="list" name="list" value="list"></input>
+    -->
+    <textarea id="sqlText" placeholder="sql goes here"></textarea>
+
+Then
+
+    selectomatic -s "SELECT STMT;"
+
+# Action
+# Programmer's Notes
+
+# Example
+
+the html fragment above would render like so:
+
+<fieldset>
+<legend>table1</legend>
+<label>
+    <input type="checkbox" onclick="do_applicableTags(this)" name="table1" value="field1"></input>
+    field1
+</label>
+<label>
+    <input type="checkbox" onclick="do_applicableTags(this)" name="table1" value="field2"></input>
+    field2
+</label>
+</fieldset>
+
+<fieldset>
+<legend>view1</legend>
+<label>
+    <input type="checkbox" onclick="do_applicableTags(this)" name="view1" value="field1"></input>
+    field1
+</label>
+<label>
+    <input type="checkbox" onclick="do_applicableTags(this)" name="view1" value="field2"></input>
+    field2
+</label>
+</fieldset>
+<!--
+<input id="listButton" type="button" onclick="doList();" title="list" name="list" value="list"></input>
+-->
+<textarea id="sqlText" placeholder="sql goes here"></textarea>
+
+# Bugs
+
+# Building
+
+# Colophon
+
+<p>
+Produced with:
+</p>
+<pre>
+!!PPtype makeDoc.bat | sed -n $p
+</pre>
+
+!!PP sDateTime

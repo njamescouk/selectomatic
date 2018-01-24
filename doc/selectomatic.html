@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Nick James">
+  <meta name="dcterms.date" content="2018-12-01">
+  <title>%EXE_VER%</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="devDoc.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header>
+<h1 class="title">%EXE_VER%</h1>
+<h2 class="author">Nick James</h2>
+<h3 class="date">24/01/2018</h3>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#installation"><span class="toc-section-number">2</span> Installation</a></li>
+<li><a href="#synopsis"><span class="toc-section-number">3</span> Synopsis</a></li>
+<li><a href="#action"><span class="toc-section-number">4</span> Action</a></li>
+<li><a href="#programmers-notes"><span class="toc-section-number">5</span> Programmer's Notes</a></li>
+<li><a href="#example"><span class="toc-section-number">6</span> Example</a></li>
+<li><a href="#bugs"><span class="toc-section-number">7</span> Bugs</a></li>
+<li><a href="#building"><span class="toc-section-number">8</span> Building</a></li>
+<li><a href="#colophon"><span class="toc-section-number">9</span> Colophon</a></li>
+</ul>
+</nav>
+<h1 id="introduction"><span class="header-section-number">1</span> Introduction</h1>
+<p>Selectomatic is sql which has an sqlite database as input that writes html checkboxes enabling selection of fields in tables and views. Selecting checkboxes then generates an sql select string which can be sent off to get the results</p>
+<h1 id="installation"><span class="header-section-number">2</span> Installation</h1>
+<h1 id="synopsis"><span class="header-section-number">3</span> Synopsis</h1>
+<p>ideally</p>
+<pre><code>sqlite3 db &lt; selectomatic.sql &gt; htmlFragment</code></pre>
+<p>but perhaps</p>
+<pre><code>selectomatic -d db &gt; htmlFragment</code></pre>
+<p>where htmlFragment looks something like</p>
+<pre><code>&lt;fieldset&gt;
+&lt;legend&gt;table1&lt;/legend&gt;
+&lt;label&gt;
+    &lt;input type=&quot;checkbox&quot; onclick=&quot;do_applicableTags(this)&quot; name=&quot;table1&quot; value=&quot;field1&quot;&gt;&lt;/input&gt;
+    field1
+&lt;/label&gt;
+&lt;label&gt;
+    &lt;input type=&quot;checkbox&quot; onclick=&quot;do_applicableTags(this)&quot; name=&quot;table1&quot; value=&quot;field2&quot;&gt;&lt;/input&gt;
+    field2
+&lt;/label&gt;
+&lt;/fieldset&gt;
+
+&lt;fieldset&gt;
+&lt;legend&gt;view1&lt;/legend&gt;
+&lt;label&gt;
+    &lt;input type=&quot;checkbox&quot; onclick=&quot;do_applicableTags(this)&quot; name=&quot;view1&quot; value=&quot;field1&quot;&gt;&lt;/input&gt;
+    field1
+&lt;/label&gt;
+&lt;label&gt;
+    &lt;input type=&quot;checkbox&quot; onclick=&quot;do_applicableTags(this)&quot; name=&quot;view1&quot; value=&quot;field2&quot;&gt;&lt;/input&gt;
+    field2
+&lt;/label&gt;
+&lt;/fieldset&gt;
+&lt;!--
+&lt;input id=&quot;listButton&quot; type=&quot;button&quot; onclick=&quot;doList();&quot; title=&quot;list&quot; name=&quot;list&quot; value=&quot;list&quot;&gt;&lt;/input&gt;
+--&gt;
+&lt;textarea id=&quot;sqlText&quot; placeholder=&quot;sql goes here&quot;&gt;&lt;/textarea&gt;</code></pre>
+<p>Then</p>
+<pre><code>selectomatic -s &quot;SELECT STMT;&quot;</code></pre>
+<h1 id="action"><span class="header-section-number">4</span> Action</h1>
+<h1 id="programmers-notes"><span class="header-section-number">5</span> Programmer's Notes</h1>
+<h1 id="example"><span class="header-section-number">6</span> Example</h1>
+<p>which would render like so:</p>
+<fieldset>
+<legend>table1</legend> <label> <input type="checkbox" onclick="do_applicableTags(this)" name="table1" value="field1"></input> field1 </label> <label> <input type="checkbox" onclick="do_applicableTags(this)" name="table1" value="field2"></input> field2 </label>
+</fieldset>
+<fieldset>
+<legend>view1</legend> <label> <input type="checkbox" onclick="do_applicableTags(this)" name="view1" value="field1"></input> field1 </label> <label> <input type="checkbox" onclick="do_applicableTags(this)" name="view1" value="field2"></input> field2 </label>
+</fieldset>
+<!--
+<input id="listButton" type="button" onclick="doList();" title="list" name="list" value="list"></input>
+-->
+<textarea id="sqlText" placeholder="sql goes here">
+</textarea>
+<h1 id="bugs"><span class="header-section-number">7</span> Bugs</h1>
+<h1 id="building"><span class="header-section-number">8</span> Building</h1>
+<h1 id="colophon"><span class="header-section-number">9</span> Colophon</h1>
+<p>
+Produced with:
+</p>
+<pre>
+pp selectomatic.txt | pandoc --toc -N -c devDoc.css -s -t html5 -o selectomatic.html
+
+</pre>
+<p>2018-01-24 00:04:00</p>
+</body>
+</html>

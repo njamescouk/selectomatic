@@ -1,0 +1,5 @@
+2 things to do :
+1. write selectomatic.sql
+2. do javascript to compute select statement
+
+   problem? how to do joins?
