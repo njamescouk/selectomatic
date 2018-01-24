@@ -5,7 +5,6 @@ SELECT tableOrView AS parent
 ,'<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="' || tableOrView || '" value="' || field || '"></input>' AS element
 FROM "tablesAndFields";
 
-
 CREATE VIEW "labels" AS 
 SELECT parent
 ,'<label>
@@ -16,11 +15,11 @@ SELECT parent
 FROM "inputs";
 
 CREATE VIEW "fieldsets" AS 
-SELECT '<fieldset>
+SELECT '<fieldset style="display: inline;">
 <legend>' || parent || '</legend>
 ' || group_concat(element, '
 ') || '
-</fieldset>' AS element
+</fieldset><br/>' AS element
 FROM "labels"
 GROUP BY parent;
 
@@ -30,7 +29,7 @@ SELECT 1 AS seq,
 <h3>your user friendly interactive field selector for <code>example.db</code></h3>
 ' || group_concat(element, '
 ') || '
-<textarea row="3" cols="75" id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
+<textarea row="6" cols="75" id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
 ' AS elements
 FROM fieldsets
 UNION 
@@ -61,8 +60,9 @@ function doFieldChange()
             }
         }
     }
-    console.log(fieldList);
-    console.log(tableSet);
+    //console.log(fieldList);
+    //console.log(tableSet);
+    
     var tableArr = [...tableSet]; // Sets seemingly write only...
     var tableStr = "";
     for (i = 0; i < tableArr.length; i++) 
@@ -74,8 +74,12 @@ function doFieldChange()
         tableStr += tableArr[i];
     }
 
-    var selectStr = "SELECT " + fieldList + " FROM\n" + tableStr + ";";
-    console.log(selectStr);
+    var selectStr = "";
+    if (fieldList.length > 0)
+    {
+        selectStr = "SELECT DISTINCT " + fieldList + " FROM\n" + tableStr + ";";
+    }
+    //console.log(selectStr);
 
     thingy = document.getElementById("sqlText");
     thingy.innerHTML = selectStr;
