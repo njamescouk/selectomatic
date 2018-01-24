@@ -1,3 +1,0 @@
-rows,col1,col2,col3
-numbers,number1,number2,number3
-rowsXnumbers,col1,col2,col3,number1,number2,number3
