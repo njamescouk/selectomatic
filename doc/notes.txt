@@ -3,3 +3,6 @@
 2. do javascript to compute select statement
 
    problem? how to do joins?
+
+file:///I:/lib/sqlite/ver_3_15_2/sqlite-doc-3150200/fts5.html
+file:///I:/lib/sqlite/ver_3_15_2/sqlite-doc-3150200/fts3.html

@@ -83,15 +83,26 @@ number3
 <script type="text/javascript">
 function doFieldChange(couldBeAnything)
 {
-    console.log (couldBeAnything.name + " " + couldBeAnything.value + " " + couldBeAnything.checked);
+    // console.log (couldBeAnything.name + " " + couldBeAnything.value + " " + couldBeAnything.checked);
     selectoInputs = document.getElementsByClassName("selectomaticInput");
+    var fieldList = "";
+    var fieldCount = 0;
     for (var i = 0; i < selectoInputs.length; i += 1) 
     {
         if (selectoInputs[i].type == "checkbox")
         {
-            console.log(selectoInputs[i]);
+            if (selectoInputs[i].checked)
+            {
+                if (fieldCount > 0)
+                {
+                    fieldList += ",";
+                }
+                fieldCount++;
+                fieldList += selectoInputs[i].name + "." + selectoInputs[i].value;
+            }
         }
     }
+    console.log(fieldList);
 }
 </script>
 

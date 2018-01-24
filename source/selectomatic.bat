@@ -1,4 +1,5 @@
 rem @echo off
+
 if "%1"=="" echo no db given & goto usage
 if "%1"=="-h" goto usage
 
@@ -21,9 +22,10 @@ rem import into selecto db and add views for selecto html
 if exist %SELECTO_DB% del %SELECTO_DB%
 sqliteimport %SELECTO_DB% tablesAndFields.csv
 sqlite3 %SELECTO_DB% < views.sql
+if not %ERRORLEVEL%==0 echo error line 24 & goto :eof
 
 rem bingo
-sqlite3 %SELECTO_DB% "SELECT elements FROM page;" | htmlwrap > selectomatic.html
+sqlite3 %SELECTO_DB% "SELECT elements FROM page ORDER BY seq;" | htmlwrap > selectomatic.html
 
 set SELECTO_DB=
 set SELECTO_INPUT=
