@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="generator" content="htmlwrap"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<h2>Selectomatic!</h2>
+<h3>your user friendly interactive field selector for <code>example.db</code></h3>
+<fieldset>
+<legend>numbers</legend>
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="numbers" value="number1"></input>
+number1
+</label>
+
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="numbers" value="number2"></input>
+number2
+</label>
+
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="numbers" value="number3"></input>
+number3
+</label>
+
+</fieldset>
+<fieldset>
+<legend>rows</legend>
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="rows" value="col1"></input>
+col1
+</label>
+
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="rows" value="col2"></input>
+col2
+</label>
+
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="rows" value="col3"></input>
+col3
+</label>
+
+</fieldset>
+<fieldset>
+<legend>rowsXnumbers</legend>
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="col1"></input>
+col1
+</label>
+
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="col2"></input>
+col2
+</label>
+
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="col3"></input>
+col3
+</label>
+
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="number1"></input>
+number1
+</label>
+
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="number2"></input>
+number2
+</label>
+
+<label>
+<input type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="number3"></input>
+number3
+</label>
+
+</fieldset>
+<textarea id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
+
+</body>
+</html>

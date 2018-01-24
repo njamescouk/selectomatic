@@ -11,3 +11,4 @@ if exist selectomatic.db del selectomatic.db
 sqliteimport selectomatic.db tablesAndFields.csv
 sqlite3 selectomatic.db < views.sql
 
+sqlite3 selectomatic.db "SELECT elements FROM page;" | htmlwrap > selectomatic.html

@@ -51,7 +51,7 @@ where htmlFragment looks something like
     <!--
     <input id="listButton" type="button" onclick="doList();" title="list" name="list" value="list"></input>
     -->
-    <textarea id="sqlText" placeholder="sql goes here"></textarea>
+    <textarea id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
 
 Then
 
@@ -90,7 +90,7 @@ the html fragment above would render like so:
 <!--
 <input id="listButton" type="button" onclick="doList();" title="list" name="list" value="list"></input>
 -->
-<textarea id="sqlText" placeholder="sql goes here"></textarea>
+<textarea id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
 
 # Bugs
 

@@ -15,3 +15,20 @@ SELECT parent
 ' AS element
 FROM "inputs";
 
+CREATE VIEW "fieldsets" AS 
+SELECT '<fieldset>
+<legend>' || parent || '</legend>
+' || group_concat(element, '
+') || '
+</fieldset>' AS element
+FROM "labels"
+GROUP BY parent;
+
+CREATE VIEW "page" AS 
+SELECT '<h2>Selectomatic!</h2>
+<h3>your user friendly interactive field selector for <code>example.db</code></h3>
+' || group_concat(element, '
+') || '
+<textarea id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
+' AS elements
+FROM fieldsets;
