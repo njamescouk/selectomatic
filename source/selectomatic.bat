@@ -1,5 +1,5 @@
-rem @echo off
-
+@echo off
+rem 
 if "%1"=="" echo no db given & goto usage
 if "%1"=="-h" goto usage
 

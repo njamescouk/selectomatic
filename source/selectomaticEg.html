@@ -8,7 +8,7 @@
 <body>
 <h2>Selectomatic!</h2>
 <h3>your user friendly interactive field selector for <code>example.db</code></h3>
-<fieldset>
+<fieldset style="display: inline;">
 <legend>numbers</legend>
 <label>
 <input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="numbers" value="number1"></input>
@@ -25,8 +25,8 @@ number2
 number3
 </label>
 
-</fieldset>
-<fieldset>
+</fieldset><br/>
+<fieldset style="display: inline;">
 <legend>rows</legend>
 <label>
 <input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rows" value="col1"></input>
@@ -43,8 +43,8 @@ col2
 col3
 </label>
 
-</fieldset>
-<fieldset>
+</fieldset><br/>
+<fieldset style="display: inline;">
 <legend>rowsXnumbers</legend>
 <label>
 <input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rowsXnumbers" value="col1"></input>
@@ -76,8 +76,8 @@ number2
 number3
 </label>
 
-</fieldset>
-<textarea id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
+</fieldset><br/>
+<textarea row="6" cols="75" id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
 
 
 <script type="text/javascript">
@@ -105,8 +105,9 @@ function doFieldChange()
             }
         }
     }
-    console.log(fieldList);
-    console.log(tableSet);
+    //console.log(fieldList);
+    //console.log(tableSet);
+    
     var tableArr = [...tableSet]; // Sets seemingly write only...
     var tableStr = "";
     for (i = 0; i < tableArr.length; i++) 
@@ -118,8 +119,12 @@ function doFieldChange()
         tableStr += tableArr[i];
     }
 
-    var selectStr = "SELECT " + fieldList + " FROM " + tableStr + ";";
-    console.log(selectStr);
+    var selectStr = "";
+    if (fieldList.length > 0)
+    {
+        selectStr = "SELECT DISTINCT " + fieldList + " FROM\n" + tableStr + ";";
+    }
+    //console.log(selectStr);
 
     thingy = document.getElementById("sqlText");
     thingy.innerHTML = selectStr;
