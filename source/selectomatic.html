@@ -11,17 +11,17 @@
 <fieldset>
 <legend>numbers</legend>
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="numbers" value="number1"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="numbers" value="number1"></input>
 number1
 </label>
 
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="numbers" value="number2"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="numbers" value="number2"></input>
 number2
 </label>
 
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="numbers" value="number3"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="numbers" value="number3"></input>
 number3
 </label>
 
@@ -29,17 +29,17 @@ number3
 <fieldset>
 <legend>rows</legend>
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="rows" value="col1"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rows" value="col1"></input>
 col1
 </label>
 
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="rows" value="col2"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rows" value="col2"></input>
 col2
 </label>
 
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="rows" value="col3"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rows" value="col3"></input>
 col3
 </label>
 
@@ -47,51 +47,82 @@ col3
 <fieldset>
 <legend>rowsXnumbers</legend>
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="col1"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rowsXnumbers" value="col1"></input>
 col1
 </label>
 
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="col2"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rowsXnumbers" value="col2"></input>
 col2
 </label>
 
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="col3"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rowsXnumbers" value="col3"></input>
 col3
 </label>
 
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="number1"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rowsXnumbers" value="number1"></input>
 number1
 </label>
 
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="number2"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rowsXnumbers" value="number2"></input>
 number2
 </label>
 
 <label>
-<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="rowsXnumbers" value="number3"></input>
+<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="rowsXnumbers" value="number3"></input>
 number3
 </label>
 
 </fieldset>
-<textarea id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
+<textarea row="3" cols="75" id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
 
 
 <script type="text/javascript">
-function doFieldChange(couldBeAnything)
+function doFieldChange()
 {
-    console.log (couldBeAnything.name + " " + couldBeAnything.value + " " + couldBeAnything.checked);
     selectoInputs = document.getElementsByClassName("selectomaticInput");
-    for (var i = 0; i < selectoInputs.length; i += 1) 
+    var fieldList = "";
+    var fieldCount = 0;
+    let tableSet = new Set();
+    var i;
+    for (i = 0; i < selectoInputs.length; i += 1) 
     {
         if (selectoInputs[i].type == "checkbox")
         {
-            console.log(selectoInputs[i]);
+            // console.log(selectoInputs[i]);
+            if (selectoInputs[i].checked)
+            {
+                if (fieldCount > 0)
+                {
+                    fieldList += ",";
+                }
+                fieldCount++;
+                fieldList += selectoInputs[i].name + "." + selectoInputs[i].value;
+                tableSet.add(selectoInputs[i].name);
+            }
         }
     }
+    console.log(fieldList);
+    console.log(tableSet);
+    var tableArr = [...tableSet]; // Sets seemingly write only...
+    var tableStr = "";
+    for (i = 0; i < tableArr.length; i++) 
+    {
+        if (i > 0)
+        {
+            tableStr += ",";
+        }
+        tableStr += tableArr[i];
+    }
+
+    var selectStr = "SELECT " + fieldList + " FROM\n" + tableStr + ";";
+    console.log(selectStr);
+
+    thingy = document.getElementById("sqlText");
+    thingy.innerHTML = selectStr;
 }
 </script>
 

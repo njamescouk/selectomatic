@@ -2,7 +2,7 @@
 CREATE VIEW "inputs" AS 
 SELECT tableOrView AS parent
 , field
-,'<input class="selectomaticInput" type="checkbox" onclick="doFieldChange(this)" name="' || tableOrView || '" value="' || field || '"></input>' AS element
+,'<input class="selectomaticInput" type="checkbox" onclick="doFieldChange()" name="' || tableOrView || '" value="' || field || '"></input>' AS element
 FROM "tablesAndFields";
 
 
@@ -30,24 +30,55 @@ SELECT 1 AS seq,
 <h3>your user friendly interactive field selector for <code>example.db</code></h3>
 ' || group_concat(element, '
 ') || '
-<textarea id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
+<textarea row="3" cols="75" id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
 ' AS elements
 FROM fieldsets
 UNION 
 SELECT 2 AS seq
 ,'
 <script type="text/javascript">
-function doFieldChange(couldBeAnything)
+function doFieldChange()
 {
-    console.log (couldBeAnything.name + " " + couldBeAnything.value + " " + couldBeAnything.checked);
     selectoInputs = document.getElementsByClassName("selectomaticInput");
-    for (var i = 0; i < selectoInputs.length; i += 1) 
+    var fieldList = "";
+    var fieldCount = 0;
+    let tableSet = new Set();
+    var i;
+    for (i = 0; i < selectoInputs.length; i += 1) 
     {
         if (selectoInputs[i].type == "checkbox")
         {
-            console.log(selectoInputs[i]);
+            // console.log(selectoInputs[i]);
+            if (selectoInputs[i].checked)
+            {
+                if (fieldCount > 0)
+                {
+                    fieldList += ",";
+                }
+                fieldCount++;
+                fieldList += selectoInputs[i].name + "." + selectoInputs[i].value;
+                tableSet.add(selectoInputs[i].name);
+            }
         }
     }
+    console.log(fieldList);
+    console.log(tableSet);
+    var tableArr = [...tableSet]; // Sets seemingly write only...
+    var tableStr = "";
+    for (i = 0; i < tableArr.length; i++) 
+    {
+        if (i > 0)
+        {
+            tableStr += ",";
+        }
+        tableStr += tableArr[i];
+    }
+
+    var selectStr = "SELECT " + fieldList + " FROM\n" + tableStr + ";";
+    console.log(selectStr);
+
+    thingy = document.getElementById("sqlText");
+    thingy.innerHTML = selectStr;
 }
 </script>
 ' AS elements;
