@@ -33,7 +33,7 @@
 </ul>
 </nav>
 <h1 id="introduction"><span class="header-section-number">1</span> Introduction</h1>
-<p>Selectomatic is sql which has an sqlite database as input that writes html checkboxes enabling selection of fields in tables and views. Selecting checkboxes then generates an sql select string which can be sent off to get the results</p>
+<p>Selectomatic is sql which has an sqlite database as input that writes html checkboxes enabling selection of fields in tables and entire views. Selecting checkboxes then generates an sql select string which can be sent off to get the results</p>
 <h1 id="installation"><span class="header-section-number">2</span> Installation</h1>
 <h1 id="synopsis"><span class="header-section-number">3</span> Synopsis</h1>
 <p>ideally</p>
@@ -73,7 +73,7 @@
 <h1 id="action"><span class="header-section-number">4</span> Action</h1>
 <h1 id="programmers-notes"><span class="header-section-number">5</span> Programmer's Notes</h1>
 <h1 id="example"><span class="header-section-number">6</span> Example</h1>
-<p>which would render like so:</p>
+<p>the html fragment above would render like so:</p>
 <fieldset>
 <legend>table1</legend> <label> <input type="checkbox" onclick="do_applicableTags(this)" name="table1" value="field1"></input> field1 </label> <label> <input type="checkbox" onclick="do_applicableTags(this)" name="table1" value="field2"></input> field2 </label>
 </fieldset>
@@ -95,6 +95,6 @@ Produced with:
 pp selectomatic.txt | pandoc --toc -N -c devDoc.css -s -t html5 -o selectomatic.html
 
 </pre>
-<p>2018-01-24 00:04:00</p>
+<p>2018-01-24 01:41:29</p>
 </body>
 </html>

@@ -7,7 +7,7 @@
 Selectomatic is sql which has an 
 sqlite database as input that writes html
 checkboxes enabling selection of fields 
-in tables and views. Selecting checkboxes then 
+in tables and entire views. Selecting checkboxes then 
 generates an sql select string which can be sent 
 off to get the results
 
