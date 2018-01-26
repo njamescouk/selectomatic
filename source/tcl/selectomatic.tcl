@@ -11,6 +11,7 @@ set inputGroup [labelframe .fileSelectorGroup -text "Select database file to ope
 
 entry $inputGroup.ent -width 40
 button $inputGroup.but -text "Browse ..." -command "fileDialog $inputGroup $inputGroup.ent"
+puts [$inputGroup.ent get]
 pack $inputGroup.ent -side left -padx 10 -expand yes -fill x
 pack $inputGroup.but -side left -padx 10 -pady 3
 pack $inputGroup -fill x -padx 2c -pady 3
@@ -24,11 +25,12 @@ proc fileDialog {w ent} {
         {"All files"       *}
     }
 
-    set uf [tk_getOpenFile -multiple false -filetypes $types -parent $w -typevariable "sqlite db files"]
+    set userFile [tk_getOpenFile -multiple false -filetypes $types -parent $w -typevariable "sqlite db files"]
 
-    if {[string compare $uf ""]} {
+    if {[string compare $userFile ""]} {
         $ent delete 0 end
-        $ent insert 0 $uf
+        $ent insert 0 $userFile
         $ent xview end
     }
+
 }
