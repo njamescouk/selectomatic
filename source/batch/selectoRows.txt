@@ -1,3 +1,8 @@
-rows,col1,col2,col3
-numbers,number1,number2,number3
-rowsXnumbers,col1,col2,col3,number1,number2,number3
+purposes,Key,RefNumber,Organisation,Objective,ProcessingActivities,ExpectedOutput,ExpectedBenefits
+releases,RowID,OrganisationName,us,DataProvided,Sensitive,LegalBasisForProvision,Purpose,OneOff,NICNumber,MRNumber,PatientOptOutsApplied
+sections,id,title,blurb,sql,seq
+subSections,parentId,id,title,blurb,sql
+sectionMarkdown,id,markdown
+subSectionMarkdown,parentId,id,markdown
+orgCheck,releaseID,NICNumber,RefNumber,releaseOrganisation,purposeOrganisation
+allOrgs,Organisation
