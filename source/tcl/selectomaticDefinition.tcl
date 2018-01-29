@@ -39,9 +39,17 @@ selectoDB eval {
 
     DROP VIEW IF EXISTS "page";
     CREATE VIEW "page" AS
-    SELECT 1 AS seq,
-    '<h2>Selectomatic!</h2>
-    <h3>your user friendly interactive field selector for <code>example.db</code></h3>
+    SELECT 1 AS seq
+    ,'<!DOCTYPE html>
+<html>
+    <head>
+      <meta name="generator" content="selectomatic"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+    <body>
+    <h2>Selectomatic!</h2>
+    <h3>your user friendly interactive field selector</h3>
     ' || group_concat(element, '
     ') || '
     <textarea row="6" cols="75" id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
@@ -99,6 +107,11 @@ selectoDB eval {
         thingy = document.getElementById("sqlText");
         thingy.innerHTML = selectStr;
     }
-    </script>
-    ' AS elements;
+    </script>' AS elements
+    UNION
+    SELECT 3 AS seq
+    , '    </body>
+</html>
+    ' AS elements
+    ;
 }

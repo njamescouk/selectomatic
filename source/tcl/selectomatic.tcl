@@ -19,12 +19,9 @@ pack .fileSelectorGroup.but -side left -padx 10 -pady 3
 pack .fileSelectorGroup -fill x -padx 2c -pady 3
 focus .fileSelectorGroup.ent
 
-# end of UI ======================================================================================
-
 proc selecto {w ent} {
-    puts {line 25: selecto}
-    set dbFile [fileDialog w ent]
-    puts "line 27: $dbFile"
+    set dbFile [fileDialog $w $ent]
+    # puts "line 26: $dbFile"
     if {$dbFile eq "" } {
         puts {no file specified}
         exit 20
@@ -33,12 +30,22 @@ proc selecto {w ent} {
     sqlite3 dbhandle $dbFile -readonly true
     dbhandle enable_load_extension 1
     dbhandle eval {SELECT load_extension('regexp.sqlext');}
-    puts "line 36: sqlite version [dbhandle version]"
+    # puts "line 35: sqlite version [dbhandle version]"
     makeSelectoDB dbhandle
+
+    set fp [open "selectomatic.html" w]
+    global selectoDB
+    set page [selectoDB eval "SELECT elements FROM page ORDER BY seq;"]
+    selectoDB eval "SELECT elements FROM page ORDER BY seq;" anArray {
+        set elementRow "$anArray(elements)"
+        #puts $elementRow
+        puts $fp $elementRow
+    }
+
+    flush $fp
 }
 
 proc fileDialog {w ent} {
-    if {0} { "################################################"
     set types {
         {"sqlite db files" {.db .sqlite .etilqs}}
         {"All files"       *}
@@ -51,47 +58,36 @@ proc fileDialog {w ent} {
         $ent insert 0 $userFile
         $ent xview end
     }
-"################################################"}
-    set userFile {I:\usr\NIK\DOM\hobbies\politics\medconfidential\nhsDataRelease\2017_09to11\release2017_09-11.db}
 
     return $userFile
 }
 
 proc makeSelectoDB {db} {
-    puts "line 61"
     set tablesAndViews [$db eval {SELECT name FROM sqlite_master WHERE type='table' OR type='view' ;}]
-    puts "line 63: $tablesAndViews"
     foreach tOrV $tablesAndViews {
-        showFieldSelector $db $tOrV
+        writeTableOrView $db $tOrV
     }
-    exit 1
 }
 
-proc showFieldSelector {db name} {
-    puts "line 71: $name"
-    set sql "PRAGMA table_info (\"$name\");"
-    # set query "PRAGMA table_info ($name);"
-    puts "line 74: $sql"
+proc writeTableOrView {db tOrVName} {
+    #puts "$tOrVName"
+    set sql "PRAGMA table_info (\"$tOrVName\");"
 
-puts ====================================================\n
-    $db eval $sql ;#anArray { parray anArray }
-    puts "line 78: [$db eval $sql]" ;#anArray { parray anArray }
-    $db eval $sql anArray { parray $anArray }
-    puts [$db errorcode]
-puts ====================================================\n
-    #$db eval "PRAGMA table_info (\"$name\");" anArray { parray anArray }
-    exit 1
-    #puts "line 64 $thisIsAnArray"
-    #foreach fld $thisIsAnArray {
-    #    puts =============================================
-    #    makeSelector $fld
-    #}
+    $db eval $sql anArray { 
+        set insertSql "INSERT INTO tablesAndFields (\"tableOrView\", \"field\") VALUES ('$tOrVName', '$anArray(name)');"
+        #puts $insertSql
+        global selectoDB
+        selectoDB eval $insertSql 
+    }
 }
 
-proc makeSelector {field} {
-    puts "line 90: $field"
-}
+if {0} {
+    proc unknown {arg args} {
+        puts "================== BARF ======================"
+        puts $arg
 
-proc unknown {} {
-    puts {************** BARF ******************}
+        foreach thing $args {
+            puts $thing
+        }
+    }
 }
