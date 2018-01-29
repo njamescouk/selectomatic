@@ -1,3 +1,4 @@
+package require sqlite3
 set selectoDBFile selectomatic.db
 sqlite3 selectoDB $selectoDBFile
 
