@@ -1,36 +1,79 @@
-package require Tk
 package require sqlite3
-
+package require Tk
 source selectomaticDefinition.tcl
+source ../../tcllib/menuplus.tcl
 
+# foster-johnson.com/grid.html for sticky rowconfigure columnconfigure
+
+bind all <Escape> { exit }
+
+set initWindowWidth 400
+set initWindowHeight 0
+set curDbFile {none selected}
+set selectoStatus "<Escape> to { exit }"
+set selectoTitle "Selectomatic! Field Extractor"
+
+option add *tearoff 0 
+
+
+. configure -menu [menu .m] ;# . is a command?
+mplus .m {&File} "&Open database" {selecto . .lab}
+mplus .m {&File} "E&xit" exit
+
+#wm withdraw .
+wm minsize . 400 200
+wm deiconify .
+raise .
+focus -force .
+wm geom . [wm geom .]
 wm iconbitmap . selectoIcon.ico
-wm title . Selectomatic
+wm title . $selectoTitle
 
-label .heading -font {normal -32} -justify center -text "Selectomatic\nDatabase Viewer"
-pack .heading
+# make a group for db file and grid it
+set dbGroup [labelframe .dbLF -text {current database}]
+grid $dbGroup -row 0 -column 0 -sticky snew
 
-labelframe .fileSelectorGroup -text "Select database file to open:"
+# make a label, put it in the group we've just made
+set dbField [label .labDBFile -justify left -anchor w -relief ridge -textvariable curDbFile] ;# not 400 ?
+pack $dbField -in $dbGroup -fill x -expand 1
+set numRows 1
+#################################################
 
-entry .fileSelectorGroup.ent -width 40 
-button .fileSelectorGroup.but -text "Browse ..." -command "selecto .fileSelectorGroup .fileSelectorGroup.ent"
+# make a group (actually just a frame) for  body of gui and grid it
+set guiFrame [frame .guiFrame -relief groove]
+grid $guiFrame -row 2 -column 0 -sticky snew
+#pack $statusFrameGroup -anchor s
 
-pack .fileSelectorGroup.ent -side left -padx 10 -expand yes -fill x
-pack .fileSelectorGroup.but -side left -padx 10 -pady 3
-pack .fileSelectorGroup -fill x -padx 2c -pady 3
-focus .fileSelectorGroup.ent
+# make a label shove it in frame
+set guiField [label .labGui -anchor w -text {wibble}]
+pack $guiField -fill both -in $guiFrame ;
+#################################################
+
+# make a group (actually just a frame) for status bar and grid it
+set statusFrameGroup [frame .statusFrame]
+grid $statusFrameGroup -row 10 -column 0 -sticky snew
+#pack $statusFrameGroup -anchor s
+
+# make a label shove it in frame
+set statusField [label .labStatus -anchor w -relief sunken -textvariable selectoStatus]
+pack $statusField -fill x -in $statusFrameGroup ;
+#################################################
+
+grid rowconfigure . 2 -weight 1
+grid columnconfigure . 0 -weight 1
 
 proc selecto {w ent} {
-    set dbFile [fileDialog $w $ent]
-    # puts "line 26: $dbFile"
-    if {$dbFile eq "" } {
-        puts {no file specified}
-        exit 20
+    global curDbFile
+    set curDbFile [fileDialog $w $ent]
+    if {$curDbFile eq "" } {
+        global selectoStatus
+        set selectoStatus {no file specified}
+        return
     }
 
-    sqlite3 dbhandle $dbFile -readonly true
+    sqlite3 dbhandle $curDbFile -readonly true
     dbhandle enable_load_extension 1
     dbhandle eval {SELECT load_extension('regexp.sqlext');}
-    # puts "line 35: sqlite version [dbhandle version]"
     makeSelectoDB dbhandle
 
     set fp [open "selectomatic.html" w]
@@ -53,12 +96,6 @@ proc fileDialog {w ent} {
 
     set userFile [tk_getOpenFile -multiple false -filetypes $types -parent $w -typevariable "sqlite db files"]
 
-    if {[string compare $userFile ""]} {
-        $ent delete 0 end
-        $ent insert 0 $userFile
-        $ent xview end
-    }
-
     return $userFile
 }
 
@@ -78,16 +115,5 @@ proc writeTableOrView {db tOrVName} {
         #puts $insertSql
         global selectoDB
         selectoDB eval $insertSql 
-    }
-}
-
-if {0} {
-    proc unknown {arg args} {
-        puts "================== BARF ======================"
-        puts $arg
-
-        foreach thing $args {
-            puts $thing
-        }
     }
 }

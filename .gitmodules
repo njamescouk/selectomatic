@@ -1,0 +1,3 @@
+[submodule "tcllib"]
+	path = tcllib
+	url = I:\\lib\\tcl

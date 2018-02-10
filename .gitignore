@@ -1,3 +1,5 @@
 source/pragmaStmts.sql
 source/selectoCols.txt
 source/selectoDbFile.csv
+source/tcl/selectomatic.db
+source/tcl/selectomatic.html

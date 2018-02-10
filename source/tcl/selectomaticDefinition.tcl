@@ -44,6 +44,7 @@ selectoDB eval {
 <html>
     <head>
       <meta name="generator" content="selectomatic"/>
+      <meta name="timestamp" content="' || (SELECT datetime('now')) || '"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
@@ -53,7 +54,7 @@ selectoDB eval {
     ' || group_concat(element, '
     ') || '
     <textarea row="6" cols="75" id="sqlText" placeholder="sql will appear here, as if by magic"></textarea>
-    ' AS elements
+' AS elements
     FROM fieldsets
     UNION
     SELECT 2 AS seq
@@ -107,11 +108,12 @@ selectoDB eval {
         thingy = document.getElementById("sqlText");
         thingy.innerHTML = selectStr;
     }
-    </script>' AS elements
+    </script>
+' AS elements
     UNION
     SELECT 3 AS seq
     , '    </body>
 </html>
-    ' AS elements
+' AS elements
     ;
 }
