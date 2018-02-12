@@ -12,12 +12,15 @@ set initWindowHeight 0
 set curDbFile {none selected}
 set selectoStatus "<Escape> to { exit }"
 set selectoTitle "Selectomatic! Field Extractor"
+set tableLimit 50
+set checkboxRow 3
+set sqlRow 2
 
 option add *tearoff 0 
 
 
 . configure -menu [menu .m] ;# . is a command?
-mplus .m {&File} "&Open database" {selecto . .lab}
+mplus .m {&File} "&Open database" {selecto .}
 mplus .m {&File} "E&xit" exit
 
 #wm withdraw .
@@ -39,36 +42,44 @@ pack $dbField -in $dbGroup -fill x -expand 1
 set numRows 1
 #################################################
 
-# make a group (actually just a frame) for  body of gui and grid it
-set guiFrame [frame .guiFrame -relief groove]
-grid $guiFrame -row 2 -column 0 -sticky snew
-#pack $statusFrameGroup -anchor s
+set sqlTextFrame [frame .sqlFrame]
+grid $sqlTextFrame -row $sqlRow -column 0 -sticky snew
 
-# make a label shove it in frame
-set guiField [label .labGui -anchor w -text {wibble}]
-pack $guiField -fill both -in $guiFrame ;
+set sqlTextText [tk::text .sqlText -wrap word]
+pack $sqlTextText -fill x -in $sqlTextFrame 
+
+event add <<Paste>> <Control-v>
+event add <<Copy>> <Control-c>
+bind Entry <<Paste>> %W
+bind Entry <<Copy>> %W
 #################################################
 
-# make a group (actually just a frame) for status bar and grid it
+# make a frame for status bar and grid it
 set statusFrameGroup [frame .statusFrame]
-grid $statusFrameGroup -row 10 -column 0 -sticky snew
+grid $statusFrameGroup -row $tableLimit -column 0 -sticky snew
 #pack $statusFrameGroup -anchor s
 
 # make a label shove it in frame
 set statusField [label .labStatus -anchor w -relief sunken -textvariable selectoStatus]
 pack $statusField -fill x -in $statusFrameGroup ;
+
+grid [ttk::sizegrip .sz] -row $tableLimit -sticky se -column 0
 #################################################
 
 grid rowconfigure . 2 -weight 1
 grid columnconfigure . 0 -weight 1
 
-proc selecto {w ent} {
+proc selecto {w} {
     global curDbFile
-    set curDbFile [fileDialog $w $ent]
-    if {$curDbFile eq "" } {
-        global selectoStatus
-        set selectoStatus {no file specified}
-        return
+    if {1} {
+        set curDbFile [fileDialog $w]
+        if {$curDbFile eq "" } {
+            global selectoStatus
+            set selectoStatus {no file specified}
+            return
+        }
+    } else {
+        set curDbFile {some/other.db}
     }
 
     sqlite3 dbhandle $curDbFile -readonly true
@@ -86,9 +97,29 @@ proc selecto {w ent} {
     }
 
     flush $fp
+    close $fp
+
+    #if {numTables > $tableLimit / 2} {
+    #    exit
+    #}
+    if { [winfo exists .tableGroup] } { 
+        destroy .tableGroup
+    }
+
+    set fp [open "selectoUI.tcl" w]
+    puts $fp {global $checkboxRow}
+    global checkboxRow
+    selectoDB eval "SELECT stmts FROM tcl;"  anArray {
+        set stmtRow "$anArray(stmts)"
+        puts $fp $stmtRow
+        eval $stmtRow
+    }
+    close $fp
+
+    #source selectoUI.tcl
 }
 
-proc fileDialog {w ent} {
+proc fileDialog {w} {
     set types {
         {"sqlite db files" {.db .sqlite .etilqs}}
         {"All files"       *}
@@ -116,4 +147,32 @@ proc writeTableOrView {db tOrVName} {
         global selectoDB
         selectoDB eval $insertSql 
     }
+}
+
+proc getData {tableList fieldList} {
+    #puts $tableList
+    #puts $fieldList
+    #puts {=====================================================}
+
+    set fieldClause ""
+    for {set i 0} {$i < [llength $fieldList]} {incr i} {
+        if {$i > 0} {
+            set fieldClause "$fieldClause,"
+        }
+        set fieldClause "$fieldClause [lindex $fieldList $i]"
+    }
+
+    set fromClause ""
+    for {set i 0} {$i < [llength $tableList]} {incr i} {
+        if {$i > 0} {
+            set fromClause "$fromClause,"
+        }
+        set fromClause "$fromClause [lindex $tableList $i]"
+    }
+
+    set selectStr "SELECT DISTINCT $fieldClause FROM\n $fromClause ;";
+    # puts $selectStr
+    global sqlTextText
+    $sqlTextText delete 1.0 end
+    $sqlTextText insert 1.0  $selectStr
 }
